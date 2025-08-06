@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Vạn Mộc Mall</title>
+    <meta name="description" content="Blog làm đẹp tự nhiên - Từ thành phần đến trải nghiệm, hiểu sâu hơn về sản phẩm bạn đang dùng">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Prata&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="https://vmm.ctrl.com.vn/c88b292dea22637c3a33.jpg" type="image/x-icon" />
+    <link rel="icon" href="https://vmm.ctrl.com.vn/c88b292dea22637c3a33.jpg" type="image/x-icon" />
+    <link href="https://vmm.ctrl.com.vn/c88b292dea22637c3a33.jpg" rel="apple-touch-icon" />
+    <link href="https://vmm.ctrl.com.vn/c88b292dea22637c3a33.jpg" rel="apple-touch-icon-precomposed" />   
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Blog page specific styles */
+        .breadcrumb-section {
+            background: #f8f9fa;
+            padding: 20px 0;
+            border-bottom: 1px solid #e9ecef;
+            margin-top: 0;
+        }
+        
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            list-style: none;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .breadcrumb-item {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .breadcrumb-item a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .breadcrumb-item a:hover {
+            color: #28a745;
+        }
+        
+        .breadcrumb-item.active {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .breadcrumb-item:not(:last-child)::after {
+            content: ">";
+            margin-left: 8px;
+            color: #ccc;
+        }
+        
+        /* Cart count styles */
+        .cart-icon {
+            position: relative;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            display: none;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            min-width: 24px;
+            min-height: 24px;
+            z-index: 1000;
+            line-height: 1;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+        }
+        
+        /* Multi-level menu styles */
+        .has-submenu {
+            position: relative;
+        }
+        
+        .submenu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            padding: 10px 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .submenu-level2 {
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background: white;
+            min-width: 180px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            padding: 10px 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .has-submenu:hover .submenu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .has-submenu:hover .submenu-level2 {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+        
+        .submenu li,
+        .submenu-level2 li {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .submenu a,
+        .submenu-level2 a {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .submenu a:hover,
+        .submenu-level2 a:hover {
+            background: #f5f5f5;
+            color: #4A7D4A;
+        }
+        
+        .submenu .has-submenu > a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .submenu .has-submenu > a img {
+            width: 12px;
+            height: 12px;
+            transform: rotate(-90deg);
+        }
+        
+        /* Active menu item */
+        .main-nav ul li a.active {
+            color: #4A7D4A;
+            border-bottom: 2px solid #4A7D4A;
+        }
+        
+        /* Menu arrow direction */
+        .has-submenu > a img {
+            transition: transform 0.3s ease;
+        }
+        
+        .has-submenu:hover > a img {
+            transform: rotate(180deg);
+        }
+        
+        .blog-hero {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://nov-karl-6.myshopify.com/cdn/shop/files/s-1_2048x.jpg?v=1665652995');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+        
+        .blog-content {
+            background: #F9F9F9;
+            min-height: 100vh;
+        }
+        
+        .blog-hero h1 {
+            font-family: 'Prata', serif;
+            font-size: 36px;
+            max-width: 800px;
+            line-height: 1.4;
+        }
+        
+        .blog-content {
+            padding: 40px 0 !important;
+            margin-top: 0 !important;
+        }
+        
+        .blog-container {
+            display: grid !important;
+            grid-template-columns: 1.5fr 1fr !important;
+            gap: 30px !important;
+            align-items: start !important;
+            margin-top: 0 !important;
+            width: 100% !important;
+            position: relative !important;
+        }
+        
+        .blog-main h2 {
+            font-family: 'Prata', serif;
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #1D1D1D;
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        
+        .blog-post {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .blog-post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        
+        .blog-post-image {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .blog-post-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .blog-post:hover .blog-post-image img {
+            transform: scale(1.05);
+        }
+        
+        .blog-category {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(74, 125, 74, 0.9);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .blog-post-content {
+            padding: 20px;
+        }
+        
+        .blog-post-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            line-height: 1.4;
+            color: #1D1D1D;
+        }
+        
+        .blog-post-excerpt {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .blog-post-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 15px;
+        }
+        
+        .blog-post-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .read-more {
+            color: #4A7D4A;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s ease;
+        }
+        
+        .read-more:hover {
+            color: #3a6a3a;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 50px;
+        }
+        
+        .pagination-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #666;
+        }
+        
+        .pagination-btn:hover,
+        .pagination-btn.active {
+            background: #4A7D4A;
+            color: white;
+            border-color: #4A7D4A;
+        }
+        
+        /* Sidebar styles */
+        .blog-sidebar {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            display: block;
+            width: 100%;
+            min-width: 300px;
+            grid-column: 2;
+        }
+        
+        .sidebar-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: block;
+            width: 100%;
+        }
+        
+        .sidebar-section h3 {
+            font-family: 'Prata', serif;
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #1D1D1D;
+            border-bottom: 2px solid #4A7D4A;
+            padding-bottom: 10px;
+        }
+        
+        .van-moc-info {
+            text-align: center;
+        }
+        
+        .van-moc-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: block;
+        }
+        
+        .van-moc-info p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .social-icons a {
+            width: 35px;
+            height: 35px;
+            background: #f5f5f5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            background: #4A7D4A;
+        }
+        
+        .social-icons img {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .category-list {
+            list-style: none;
+        }
+        
+        .category-list li {
+            margin-bottom: 10px;
+        }
+        
+        .category-list a {
+            color: #666;
+            text-decoration: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            transition: color 0.3s ease;
+        }
+        
+        .category-list a:hover {
+            color: #4A7D4A;
+        }
+        
+        .category-count {
+            background: #f5f5f5;
+            color: #666;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        
+        .popular-posts {
+            list-style: none;
+        }
+        
+        .popular-post {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .popular-post:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .popular-post-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .popular-post-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .popular-post-content h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+        
+        .popular-post-meta {
+            font-size: 12px;
+            color: #888;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        
+        .gallery-item {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        @media (max-width: 992px) {
+            .blog-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .blog-sidebar {
+                position: static;
+                margin-top: 30px;
+                min-width: auto;
+                grid-column: 1;
+            }
+            
+            .post-main {
+                max-width: 100%;
+                grid-column: 1;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .blog-hero h1 {
+                font-size: 28px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .blog-hero {
+                height: 300px;
+            }
+            
+            .blog-hero h1 {
+                font-size: 24px;
+            }
+            
+            .blog-content {
+                padding: 40px 0;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Post specific styles */
+        .post-main {
+            background: #fff;
+            display: block;
+            width: 100%;
+            max-width: none;
+            grid-column: 1;
+        }
+        
+        .post-content {
+            background: #fff;
+            width: 100%;
+            max-width: 100%;
+        }
+        
+        .post-featured-image {
+            width: 100%;
+            height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+        
+        .post-featured-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .post-intro {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 40px;
+            padding: 40px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #4A7D4A;
+            font-weight: 400;
+        }
+        
+        .post-intro h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .post-toc {
+            background: #fff !important;
+            padding: 0 !important;
+            border-radius: 12px !important;
+            margin-bottom: 30px !important;
+            border: 1px solid #e9ecef !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important;
+            overflow: hidden !important;
+        }
+        
+        .post-toc h3 {
+            font-size: 22px !important;
+            color: #333 !important;
+            margin-bottom: 25px !important;
+            font-weight: 600 !important;
+            display: flex !important;
+            align-items: flex-start !important;
+            /* justify-content: space-between !important; */
+            padding: 15px 20px !important;
+            background: #f8f9fa !important;
+            border-radius: 8px 8px 0 0 !important;
+            margin: 0 !important;
+        }
+        
+        .post-toc h3:before {
+            content: "" !important;
+            width: 20px !important;
+            height: 20px !important;
+            background: url('VMM_ICON/VMM_ICON/icon_menu.svg') no-repeat center !important;
+            background-size: contain !important;
+            margin-right: 10px !important;
+            display: inline-block !important;
+        }
+        
+        .post-toc h3:after {
+            content: "" !important;
+            width: 16px !important;
+            height: 16px !important;
+            background: url('VMM_ICON/VMM_ICON/arrow.svg') no-repeat center !important;
+            background-size: contain !important;
+            transform: rotate(180deg) !important;
+            display: inline-block !important;
+        }
+        
+        .post-toc ul {
+            list-style: none !important;
+            padding: 20px !important;
+            margin: 0 !important;
+        }
+        
+        .post-toc li {
+            padding: 8px 0 !important;
+            border-bottom: 1px solid #e9ecef !important;
+            margin-bottom: 5px !important;
+        }
+        
+        .post-toc li:last-child {
+            border-bottom: none !important;
+        }
+        
+        .post-toc a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .post-toc a:before {
+            content: "";
+            width: 16px;
+            height: 16px;
+            background: url('VMM_ICON/VMM_ICON/icon_blog_png/icon_blog_1.png') no-repeat center;
+            background-size: contain;
+            margin-right: 12px;
+            display: inline-block;
+        }
+        
+        .post-toc a:hover {
+            color: #4A7D4A;
+        }
+        
+        /* Smooth scrolling for table of contents */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .post-toc ul ul {
+            margin-left: 35px;
+            margin-top: 8px;
+        }
+        
+        .post-toc ul ul li {
+            padding: 4px 0;
+            border-bottom: none;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+            margin-bottom: 3px;
+        }
+        
+        .post-toc ul ul li:before {
+            content: "";
+            width: 12px;
+            height: 12px;
+            background: url('VMM_ICON/VMM_ICON/icon_blog_png/icon_blog_2.png') no-repeat center;
+            background-size: contain;
+            margin-right: 12px;
+            display: inline-block;
+        }
+        
+        .post-section {
+            margin-bottom: 30px !important;
+        }
+        
+        .post-section h2 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #4A7D4A;
+            font-weight: 600;
+        }
+        
+        .post-section p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+        
+        .post-section-image {
+            width: 100%;
+            height: 300px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 30px 0;
+        }
+        
+        .post-section-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .post-share {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 40px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        
+        .post-share span {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .share-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .share-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            background: #f5f5f5;
+            border: 1px solid #e9ecef;
+        }
+        
+        .share-btn:hover {
+            background: #4A7D4A;
+            transform: scale(1.1);
+        }
+        
+        .share-btn:hover img {
+            filter: brightness(0) invert(1);
+        }
+        
+        .share-btn img {
+            width: 24px;
+            height: 24px;
+        }
+        
+        /* Related Articles Section - Full Width */
+        .related-articles-full-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 60px 0;
+            margin-top: 0;
+        }
+        
+        /* Related Articles Section */
+        .related-articles-section {
+            margin-top: 60px;
+        }
+        
+        .related-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .related-header h3 {
+            font-size: 24px;
+            color: #333;
+            margin: 0;
+        }
+        
+        .view-all-link {
+            color: #4A7D4A;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s ease;
+        }
+        
+        .view-all-link:hover {
+            color: #3a6a3a;
+        }
+        
+        .related-articles-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+        
+        .related-article {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .related-article:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        
+        .related-article-image {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+        
+        .related-article-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .related-article:hover .related-article-image img {
+            transform: scale(1.05);
+        }
+        
+        .related-category {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(74, 125, 74, 0.9);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .related-article-content {
+            padding: 20px;
+        }
+        
+        .related-article-content h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            line-height: 1.4;
+            color: #1D1D1D;
+        }
+        
+        .related-article-content p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .related-article-meta {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 15px;
+        }
+        
+        .read-now-btn {
+            color: #4A7D4A;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s ease;
+        }
+        
+        .read-now-btn:hover {
+            color: #3a6a3a;
+        }
+        
+        /* Agent Form Styles */
+        .agent-form-section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .agent-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .agent-form input,
+        .agent-form textarea {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            background: #f8f9fa;
+            transition: border-color 0.3s ease;
+        }
+        
+        .agent-form input:focus,
+        .agent-form textarea:focus {
+            outline: none;
+            border-color: #28a745;
+            background: #fff;
+        }
+        
+        .agent-form textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .submit-agent-btn {
+            padding: 12px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        .submit-agent-btn:hover {
+            background: #218838;
+        }
+        
+        .comments-section {
+            margin-top: 40px !important;
+        }
+        
+        .comments-section h3 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .comment-instruction {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        
+        .comment-form {
+            background: #f8f9fa !important;
+            padding: 25px !important;
+            border-radius: 12px !important;
+            margin-bottom: 30px !important;
+        }
+        
+        .comment-form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+        
+        .comment-form-row textarea {
+            flex: 3;
+            min-height: 120px;
+            padding: 15px;
+            border: 0.5px solid #ddd;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            background: #f0f0f0;
+        }
+        
+        .comment-form-row input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 0.5px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #f0f0f0;
+        }
+        
+        .comment-form-button {
+            display: flex;
+            align-items: flex-end;
+            height: 45px;
+        }
+        
+        .comment-form-fields {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        
+        .comment-form-fields input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 0.5px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #f0f0f0;
+            height: 45px;
+        }
+        
+        .btn-post-comment {
+            padding: 12px 24px;
+            background: #4A7D4A;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            height: 45px;
+            white-space: nowrap;
+        }
+        
+        .btn-post-comment:hover {
+            background: #3a6a3a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 125, 74, 0.3);
+        }
+        
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .comment-item {
+            display: flex !important;
+            gap: 20px !important;
+            padding: 20px !important;
+            background: #fff !important;
+            border: 1px solid #e9ecef !important;
+            border-radius: 12px !important;
+            margin-bottom: 15px !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+        }
+        
+        .comment-avatar {
+            flex-shrink: 0;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .comment-avatar img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #f0f0f0;
+        }
+        
+        .comment-content {
+            flex: 1;
+        }
+        
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .comment-author {
+            font-weight: 700;
+            color: #333;
+            font-size: 16px;
+        }
+        
+        .comment-date {
+            font-size: 12px;
+            color: #999;
+            text-align: right;
+        }
+        
+        .comment-text {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+        
+        .reply-link {
+            color: #4A7D4A;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 5px 10px;
+            border: 1px solid #4A7D4A;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .reply-link:hover {
+            background: #4A7D4A;
+            color: white;
+            text-decoration: none;
+        }
+        
+        @media (max-width: 768px) {
+            .comment-form-row {
+                flex-direction: column;
+            }
+            
+            .post-featured-image {
+                height: 250px;
+            }
+            
+            .post-section-image {
+                height: 200px;
+            }
+            
+            .related-articles-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .related-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .related-articles-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .related-articles-full-section {
+                padding: 40px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html"><img src="c88b292dea22637c3a33.jpg" alt="Vạn Mộc Logo"></a>
+            </div>
+            <div class="menu-toggle">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">TRANG CHỦ</a></li>
+                    <li class="has-submenu">
+                        <a href="category.html">SẢN PHẨM <img src="VMM_ICON/VMM_ICON/arrow.svg" alt="arrow"></a>
+                        <ul class="submenu">
+                            <li><a href="category.html">Brands'</a></li>
+                            <li><a href="category.html">Forganic</a></li>
+                            <li class="has-submenu">
+                                <a href="category.html">Mộc Hương <img src="VMM_ICON/VMM_ICON/arrow.svg" alt="arrow"></a>
+                                <ul class="submenu-level2">
+                                    <li><a href="category.html">Chăm sóc da</a></li>
+                                    <li><a href="category.html">Chăm sóc tóc</a></li>
+                                    <li><a href="category.html">Combo gội</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="category.html">Srisri</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="blog.html">BÀI VIẾT</a></li>
+                    <li><a href="#">KHUYẾN MÃI</a></li>
+                    <li><a href="#">VỀ CHÚNG TÔI</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <a href="#"><img src="VMM_ICON/VMM_ICON/search.png" alt="Search"></a>
+                <a href="cart.html" class="cart-icon">
+                    <img src="VMM_ICON/VMM_ICON/cart.svg" alt="Cart">
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="breadcrumb-section">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="blog.html">Blog</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Bài viết</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <section class="blog-hero">
+        <div class="container">
+            <h1>Từ thành phần đến trải nghiệm – hiểu sâu hơn về<br>sản phẩm bạn đang dùng</h1>
+        </div>
+    </section>
+
+    <section class="blog-content">
+        <div class="container">
+            <div class="blog-container">
+                <div class="post-main">
+                    <div class="post-content">
+                        <!-- Featured Image -->
+                        <div class="post-featured-image">
+                            <img src="VMM_image/VMM_image/hinh bai viet/property15.png" alt="Chăm sóc da">
+                        </div>
+
+                        <!-- Introduction -->
+                        <!-- <div class="post-intro">
+                            <h2>Phần nội dung bài đăng</h2>
+                            <p>Liệu việc thay đổi nhỏ trong chế độ ăn uống có giúp bạn kiểm soát tốt hơn các vấn đề về da không? Khám phá những thực phẩm tốt nhất cho loại da của bạn khi chúng tôi chia sẻ lời khuyên của chuyên gia về những thực phẩm nên ăn để có làn da khỏe mạnh và đề xuất các sản phẩm chăm sóc da hữu cơ yêu thích của chúng tôi để hỗ trợ những thay đổi trong lối sống của bạn.</p>
+                            <p>Bao gồm một đoạn mở đầu mô tả ngắn về chủ đề bài viết. Ngay bên dưới là mục lục nội dung, hiển thị rõ ràng theo dạng danh sách gạch đầu dòng, có phân cấp rõ ràng (mục lớn, mục con). Mỗi mục trong mục lục có thể nhấn vào để cuộn đến phần tương ứng trong bài viết.</p>
+                        </div> -->
+
+                        <!-- Table of Contents -->
+                        <div class="post-toc">
+                            <h3>Nội dung bài viết:</h3>
+                            <ul>
+                                <li><a href="#section1">1. Ăn gì để có làn da sáng hơn</a>
+                                    <ul>
+                                        <li>• Da dầu và dễ nổi mụn nên ăn gì?</li>
+                                        <li>• Vai trò của Probiotics và hệ vi sinh vật</li>
+                                        <li>• Tác động của thực phẩm nhiều dầu mỡ và đường</li>
+                                        <li>• Thiếu vitamin B2 và cách bổ sung</li>
+                                    </ul>
+                                </li>
+                                <li><a href="#section2">2. Ăn gì cho da khô</a>
+                                    <ul>
+                                        <li>• Nguyên nhân phổ biến gây khô da</li>
+                                        <li>• Các chất cần bổ sung: Acid béo, Vitamin A, B, C, E, Kẽm</li>
+                                        <li>• Thức uống nên tránh và thay thế</li>
+                                        <li>• Thực phẩm phục hồi và giữ nước cho da</li>
+                                    </ul>
+                                </li>
+                                <li><a href="#section3">3. Ăn gì cho da nhạy cảm</a>
+                                    <ul>
+                                        <li>• Da nhạy cảm nên tránh gì trong ăn uống?</li>
+                                        <li>• Gợi ý thực phẩm giàu Omega-3 và vitamin C</li>
+                                        <li>• Thực phẩm có thể kích ứng da nhạy cảm (đồ cay, sữa,...)</li>
+                                        <li>• Liên hệ giữa dị ứng thực phẩm và tình trạng da</li>
+                                    </ul>
+                                </li>
+                                <li><a href="#section4">4. Ăn gì để cải thiện làn da bị tổn thương do ánh nắng mặt trời</a>
+                                    <ul>
+                                        <li>• Thực phẩm giúp làm dịu da và chống viêm</li>
+                                        <li>• Bổ sung chất chống oxy hóa từ trái cây, rau</li>
+                                        <li>• Uống gì để giữ ẩm cho da cháy nắng</li>
+                                        <li>• Tác dụng của Astaxanthin và siêu thực phẩm phục hồi da</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Section 1 -->
+                        <div class="post-section" id="section1">
+                            <h2>1. Ăn gì để có làn da sáng hơn</h2>
+                            <p>Chế độ ăn uống đóng vai trò quan trọng trong việc duy trì làn da khỏe mạnh. Những thực phẩm giàu vitamin C, E và chất chống oxy hóa sẽ giúp da bạn sáng hơn và trẻ trung hơn.</p>
+                            <p>Đối với da dầu và dễ nổi mụn, việc kiểm soát lượng đường và chất béo trong chế độ ăn là vô cùng quan trọng. Charlotte Vahtz, người sáng lập Green People, khuyến nghị rằng việc bổ sung probiotics có thể giúp cân bằng hệ vi sinh vật đường ruột, từ đó cải thiện tình trạng da.</p>
+                            <p>Thực phẩm nhiều đường và dầu mỡ có thể làm tăng sản xuất bã nhờn, dẫn đến tắc nghẽn lỗ chân lông và hình thành mụn. Thay vào đó, hãy ưu tiên các thực phẩm giàu vitamin B2 như sữa chua, trứng và các loại hạt.</p>
+                            
+                            <div class="post-section-image">
+                                <img src="VMM_image/VMM_image/hinh bai viet/property18.png" alt="Thực phẩm tốt cho da">
+                            </div>
+                        </div>
+
+                        <!-- Section 2 -->
+                        <div class="post-section" id="section2">
+                            <h2>2. Ăn gì cho da khô</h2>
+                            <p>Da khô cần được cung cấp đủ độ ẩm từ bên trong. Các thực phẩm giàu axit béo omega-3, vitamin A và E sẽ giúp cải thiện tình trạng da khô một cách hiệu quả.</p>
+                            <p>Bạn nên tăng cường ăn các loại cá béo như cá hồi, cá thu, các loại hạt như hạt óc chó, hạt lanh, và các loại rau có màu xanh đậm.</p>
+                        </div>
+
+                        <!-- Section 3 -->
+                        <div class="post-section" id="section3">
+                            <h2>3. Ăn gì cho da nhạy cảm</h2>
+                            <p>Da nhạy cảm cần được chăm sóc đặc biệt với những thực phẩm có tính kháng viêm và làm dịu. Các thực phẩm giàu chất chống oxy hóa và có tính kháng viêm sẽ giúp giảm thiểu các phản ứng kích ứng.</p>
+                            <p>Đối với da nhạy cảm, bạn nên tránh các thực phẩm có thể gây kích ứng như đồ cay, sứa và các loại thực phẩm chứa nhiều histamine. Thay vào đó, hãy ưu tiên các thực phẩm giàu Omega-3 và vitamin C như cá hồi, quả việt quất và rau bina.</p>
+                            <p>Việc uống đủ nước cũng rất quan trọng cho da nhạy cảm. Tránh uống rượu và các đồ uống có cồn khác vì chúng có thể làm khô da và gây kích ứng.</p>
+                            
+                            <div class="post-section-image">
+                                <img src="VMM_image/VMM_image/hinh bai viet/property19.png" alt="Tập luyện thể thao">
+                            </div>
+                        </div>
+
+                        <!-- Section 4 -->
+                        <div class="post-section" id="section4">
+                            <h2>4. Ăn gì để cải thiện làn da bị tổn thương do ánh nắng mặt trời</h2>
+                            <p>Ánh nắng mặt trời có thể gây tổn thương nghiêm trọng cho làn da. Để phục hồi và bảo vệ da khỏi tác hại của tia UV, bạn cần bổ sung các thực phẩm giàu chất chống oxy hóa và vitamin.</p>
+                            <p>Để làm dịu da cháy nắng, bạn nên sử dụng nha đam (aloe vera) và tránh các thực phẩm có tính viêm như đồ cay. Thay vào đó, hãy uống nhiều nước và các loại nước ép trái cây tươi để giữ ẩm cho da và ngăn ngừa bong tróc.</p>
+                            <p>Các thực phẩm như cà chua, cà rốt, rau bina, và các loại quả mọng sẽ giúp tăng cường khả năng chống lại tác hại của ánh nắng mặt trời. Đặc biệt, Astaxanthin - một chất chống oxy hóa mạnh có trong tảo và cá hồi - được coi là siêu thực phẩm giúp phục hồi da hiệu quả.</p>
+                        </div>
+
+                        <!-- Social Share -->
+                        <div class="post-share">
+                            <span>Chia sẻ:</span>
+                            <div class="share-buttons">
+                                <a href="#" class="share-btn">
+                                    <img src="VMM_ICON/VMM_ICON/icon_face.svg" alt="Facebook" width="20" height="20">
+                                </a>
+                                <a href="#" class="share-btn">
+                                    <img src="VMM_ICON/VMM_ICON/icon_twiter.svg" alt="Twitter" width="20" height="20">
+                                </a>
+                                <a href="#" class="share-btn">
+                                    <img src="VMM_ICON/VMM_ICON/icon_pin.svg" alt="Pinterest" width="20" height="20">
+                                </a>
+                                <a href="#" class="share-btn">
+                                    <img src="VMM_ICON/VMM_ICON/icon_in.svg" alt="LinkedIn" width="20" height="20">
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Comments Section -->
+                        <div class="comments-section">
+                            <h3>Phần bình luận</h3>
+                          
+                            
+                            <div class="comment-form">
+                               
+                                <div class="comment-form-row">
+                                    <textarea placeholder="Nhập nội dung bình luận của bạn"></textarea>
+                                </div>
+                                <div class="comment-form-fields">
+                                    <input type="text" placeholder="Nhập tên của bạn">
+                                    <input type="email" placeholder="Nhập email">
+                                    <div class="comment-form-button">
+                                        <button class="btn-post-comment">Gửi bình luận</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="comments-list">
+                                <div class="comment-item">
+                                    <div class="comment-avatar">
+                                        <img src="VMM_image/VMM_image/hinh bai viet/property116.png" alt="Mai">
+                                    </div>
+                                    <div class="comment-content">
+                                        <div class="comment-header">
+                                            <span class="comment-author"><strong>Mai</strong></span>
+                                            <span class="comment-date">08-09-2025 14:30</span>
+                                        </div>
+                                        <div class="comment-text">
+                                            <p>Cảm ơn ad đã chia sẻ những cách phối đồ rất hữu ích nhé. Bài viết này thực sự giúp ích cho tôi rất nhiều trong việc chăm sóc da hàng ngày.</p>
+                                        </div>
+                                        <a href="#" class="reply-link">Trả lời</a>
+                                    </div>
+                                </div>
+
+                                <div class="comment-item">
+                                    <div class="comment-avatar">
+                                        <img src="VMM_image/VMM_image/hinh bai viet/property15.png" alt="Tuấn">
+                                    </div>
+                                    <div class="comment-content">
+                                        <div class="comment-header">
+                                            <span class="comment-author"><strong>Tuấn</strong></span>
+                                            <span class="comment-date">08-09-2025 10:15</span>
+                                        </div>
+                                        <div class="comment-text">
+                                            <p>Cảm ơn ad đã chia sẻ những cách phối đồ rất hữu ích nhé. Tôi đã áp dụng và thấy kết quả rõ rệt sau 2 tuần.</p>
+                                        </div>
+                                        <a href="#" class="reply-link">Trả lời</a>
+                                    </div>
+                                </div>
+
+                                <div class="comment-item">
+                                    <div class="comment-avatar">
+                                        <img src="VMM_image/VMM_image/hinh bai viet/property18.png" alt="Lan">
+                                    </div>
+                                    <div class="comment-content">
+                                        <div class="comment-header">
+                                            <span class="comment-author"><strong>Lan</strong></span>
+                                            <span class="comment-date">07-09-2025 16:45</span>
+                                        </div>
+                                        <div class="comment-text">
+                                            <p>Thông tin rất bổ ích! Tôi đặc biệt thích phần về thực phẩm cho da nhạy cảm. Có thể ad chia sẻ thêm về các sản phẩm chăm sóc da phù hợp không?</p>
+                                        </div>
+                                        <a href="#" class="reply-link">Trả lời</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                </div>
+
+             
+                </div>
+                <div class="blog-sidebar">
+                    <div class="sidebar-section van-moc-info">
+                        <h3>VAN MỘC MALL</h3>
+                        <img src="c88b292dea22637c3a33.jpg" alt="Van Moc Logo" class="van-moc-logo">
+                        <p>Vạn Mộc Mall tự hào là sản phẩm 100% thuần chay từ thực vật Việt Nam, không có nguồn gốc từ động vật, không thử nghiệm trên động vật, an toàn và hiệu quả cho tất cả mọi người.</p>
+                        <div class="social-icons">
+                            <a href="#"><img src="VMM_ICON/VMM_ICON/socialicon1.svg" alt="Facebook"></a>
+                            <a href="#"><img src="VMM_ICON/VMM_ICON/socialicon2.svg" alt="LinkedIn"></a>
+                            <a href="#"><img src="VMM_ICON/VMM_ICON/socialicon3.svg" alt="Twitter"></a>
+                            <a href="#"><img src="VMM_ICON/VMM_ICON/socialicon4.svg" alt="Pinterest"></a>
+                        </div>
+                    </div>
+                    <div class="sidebar-section agent-form-section">
+                        <h3>Trở thành đại lý của Vạn Mộc Mall</h3>
+                        <form class="agent-form">
+                            <input type="text" placeholder="Nhập tên của bạn" required>
+                            <input type="email" placeholder="Nhập địa chỉ email" required>
+                            <input type="tel" placeholder="Nhập số điện thoại" required>
+                            <textarea placeholder="Nhập câu hỏi & thắc mắc của bạn ở đây" rows="4"></textarea>
+                            <button type="submit" class="submit-agent-btn">Gửi yêu cầu</button>
+                        </form>
+                    </div>
+                    <div class="sidebar-section">
+                        <h3>DANH MỤC BLOG</h3>
+                        <ul class="category-list">
+                            <li><a href="#">Mỹ phẩm <span class="category-count">15</span></a></li>
+                            <li><a href="#">Chăm sóc da <span class="category-count">12</span></a></li>
+                            <li><a href="#">Trang điểm <span class="category-count">8</span></a></li>
+                            <li><a href="#">Mặt nạ và da liễu <span class="category-count">10</span></a></li>
+                            <li><a href="#">Nước hoa <span class="category-count">6</span></a></li>
+                            <li><a href="#">Phong cách sống <span class="category-count">14</span></a></li>
+                            <li><a href="#">Dinh dưỡng <span class="category-count">9</span></a></li>
+                            <li><a href="#">Kinh nghiệm <span class="category-count">11</span></a></li>
+                            <li><a href="#">Ẩm thực <span class="category-count">7</span></a></li>
+                            <li><a href="#">An uống <span class="category-count">5</span></a></li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3>PHỔ BIẾN NHẤT</h3>
+                        <ul class="popular-posts">
+                            <li class="popular-post">
+                                <div class="popular-post-image">
+                                    <img src="VMM_image/VMM_image/hinh bai viet/property12.png" alt="Popular post 1">
+                                </div>
+                                <div class="popular-post-content">
+                                    <h4>Chăm sóc da cho anh ấy: Quà tặng chu đáo</h4>
+                                    <div class="popular-post-meta">29/07/2023 • 2.500 lượt xem</div>
+                                </div>
+                            </li>
+                            <li class="popular-post">
+                                <div class="popular-post-image">
+                                    <img src="VMM_image/VMM_image/hinh bai viet/property13.png" alt="Popular post 2">
+                                </div>
+                                <div class="popular-post-content">
+                                    <h4>Quy trình chăm sóc da tối ưu cho làn da nhạy cảm</h4>
+                                    <div class="popular-post-meta">25/07/2023 • 2.200 lượt xem</div>
+                                </div>
+                            </li>
+                            <li class="popular-post">
+                                <div class="popular-post-image">
+                                    <img src="VMM_image/VMM_image/hinh bai viet/property120.png" alt="Popular post 3">
+                                </div>
+                                <div class="popular-post-content">
+                                    <h4>Mọi thứ bạn muốn biết về chăm sóc da thời kỳ mãn kinh</h4>
+                                    <div class="popular-post-meta">12/03/2023 • 1.900 lượt xem</div>
+                                </div>
+                            </li>
+                            <li class="popular-post">
+                                <div class="popular-post-image">
+                                    <img src="VMM_image/VMM_image/hinh bai viet/property121.png" alt="Popular post 4">
+                                </div>
+                                <div class="popular-post-content">
+                                    <h4>Hướng dẫn tối ưu về việc làm sạch lớp</h4>
+                                    <div class="popular-post-meta">12/12/2022 • 1.800 lượt xem</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3>THƯ VIỆN ẢNH</h3>
+                        <div class="gallery-grid">
+                            <div class="gallery-item">
+                                <img src="VMM_image/VMM_image/hinh bai viet/libary1.png" alt="Gallery 1">
+                            </div>
+                            <div class="gallery-item">
+                                <img src="VMM_image/VMM_image/hinh bai viet/libary2.png" alt="Gallery 2">
+                            </div>
+                            <div class="gallery-item">
+                                <img src="VMM_image/VMM_image/hinh bai viet/libary3.png" alt="Gallery 3">
+                            </div>
+                            <div class="gallery-item">
+                                <img src="VMM_image/VMM_image/hinh bai viet/libary4.png" alt="Gallery 4">
+                            </div>
+                            <div class="gallery-item">
+                                <img src="VMM_image/VMM_image/hinh bai viet/libary5.png" alt="Gallery 5">
+                            </div>
+                            <div class="gallery-item">
+                                <img src="VMM_image/VMM_image/hinh bai viet/libary6.png" alt="Gallery 6">
+                            </div>
+                        </div>
+                    </div>
+
+                 
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Articles Section - Full Width -->
+    <section class="related-articles-full-section">
+        <div class="container">
+            <div class="related-header">
+                <h3>Bài viết liên quan</h3>
+                <a href="blog.html" class="view-all-link">Xem tất cả <img src="VMM_ICON/VMM_ICON/button_arrow.svg" alt="arrow"></a>
+            </div>
+            
+            <div class="related-articles-grid">
+                <article class="related-article">
+                    <div class="related-article-image">
+                        <img src="VMM_image/VMM_image/hinh_blog(2)/libary1.png" alt="Chăm sóc da cho anh ấy">
+                        <div class="related-category">Chăm sóc</div>
+                    </div>
+                    <div class="related-article-content">
+                        <h4>Chăm sóc da cho anh ấy: Quà tặng chu đáo</h4>
+                        <p>Khám phá những sản phẩm chăm sóc da tự nhiên thiết yếu dành cho nam giới. Chu đáo, hiệu quả và hoàn hảo</p>
+                        <div class="related-article-meta">
+                            <span>Bởi Vạn Mộc</span> - <span>29/07/2025</span>
+                        </div>
+                        <a href="#" class="read-now-btn">ĐỌC NGAY <img src="VMM_ICON/VMM_ICON/button_docngay.svg" alt="arrow"></a>
+                    </div>
+                </article>
+
+                <article class="related-article">
+                    <div class="related-article-image">
+                        <img src="VMM_image/VMM_image/hinh_blog(2)/libary2.png" alt="Quy trình chăm sóc da">
+                        <div class="related-category">Làm đẹp</div>
+                    </div>
+                    <div class="related-article-content">
+                        <h4>Quy trình chăm sóc da tối ưu cho làn da nhạy cảm</h4>
+                        <p>Với hướng dẫn của chúng tôi, bạn có thể khám phá một quy trình chăm sóc da mới và một số sản phẩm tuyệt vời</p>
+                        <div class="related-article-meta">
+                            <span>Bởi Vạn Mộc</span> - <span>25/07/2025</span>
+                        </div>
+                        <a href="#" class="read-now-btn">ĐỌC NGAY <img src="VMM_ICON/VMM_ICON/button_docngay.svg" alt="arrow"></a>
+                    </div>
+                </article>
+
+                <article class="related-article">
+                    <div class="related-article-image">
+                        <img src="VMM_image/VMM_image/hinh_blog(2)/libary3.png" alt="Chăm sóc da thời kỳ mãn kinh">
+                        <div class="related-category">Đời sống</div>
+                    </div>
+                    <div class="related-article-content">
+                        <h4>Mọi thứ bạn muốn biết về chăm sóc da thời kỳ mãn kinh</h4>
+                        <p>Sản phẩm phù hợp để mang lại cho bạn làn da khỏe mạnh, rạng rỡ là điều quan trọng ở mọi lứa tuổi</p>
+                        <div class="related-article-meta">
+                            <span>Bởi Vạn Mộc</span> - <span>12/03/2025</span>
+                        </div>
+                        <a href="#" class="read-now-btn">ĐỌC NGAY <img src="VMM_ICON/VMM_ICON/button_docngay.svg" alt="arrow"></a>
+                    </div>
+                </article>
+
+                <article class="related-article">
+                    <div class="related-article-image">
+                        <img src="VMM_image/VMM_image/hinh_blog(2)/libary4.png" alt="Hướng dẫn làm sạch kép">
+                        <div class="related-category">Review</div>
+                    </div>
+                    <div class="related-article-content">
+                        <h4>Hướng dẫn tối ưu về việc làm sạch kép</h4>
+                        <p>Ý tưởng của phương pháp làm sạch kép là loại bỏ mọi yếu tố bên ngoài trước khi thực sự làm sạch da</p>
+                        <div class="related-article-meta">
+                            <span>Bởi Vạn Mộc</span> - <span>12/12/2024</span>
+                        </div>
+                        <a href="#" class="read-now-btn">ĐỌC NGAY <img src="VMM_ICON/VMM_ICON/button_docngay.svg" alt="arrow"></a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-col">
+                <h4>VỀ CHÚNG TÔI</h4>
+                <ul>
+                    <li><a href="#">Giới thiệu</a></li>
+                    <li><a href="#">Download Catalogue</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>BẠN NÊN BIẾT</h4>
+                <ul>
+                    <li><a href="#">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                    <li><a href="#">Bảo mật thông tin</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <img src="c88b292dea22637c3a33.jpg" alt="Vạn Mộc Logo" class="footer-logo">
+                <div class="social-icons">
+                    <a href="#"><img src="VMM_ICON/VMM_ICON/socialicon1.svg" alt="Social 1"></a>
+                    <a href="#"><img src="VMM_ICON/VMM_ICON/socialicon2.svg" alt="Social 2"></a>
+                    <a href="#"><img src="VMM_ICON/VMM_ICON/socialicon3.svg" alt="Social 3"></a>
+                    <a href="#"><img src="VMM_ICON/VMM_ICON/socialicon4.svg" alt="Social 4"></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>ĐỊA CHỈ</h4>
+                <p class="address"><img src="VMM_ICON/VMM_ICON/local_icon.svg" alt="Location"> 860/60N/8 Xô Viết Nghệ Tĩnh, phường Bình Thạnh, Tp.Hồ Chí Minh</p>
+                <h4>LIÊN HỆ</h4>
+                <p><img src="VMM_ICON/VMM_ICON/email_icon.svg" alt="Email"> vanmocmall@gmail.com</p>
+                <p><img src="VMM_ICON/VMM_ICON/call_icon.svg" alt="Phone"> 081 611 1123</p>
+            </div>
+        </div>
+        <img src="VMM_ICON/VMM_ICON/decorate_icon.png" class="footer-decor-left-img" alt="Footer Decoration">
+        <img src="VMM_ICON/VMM_ICON/decorate_icon2.png" class="footer-decor-right-img" alt="Footer Decoration">
+        <div class="copyright">
+            <p>Copyright © Vạn Mộc Mall all right reserved</p>
+        </div>
+    </footer>
+
+    <div class="fixedposicon">
+        <a class="btncall" href="tel:0816111123"><img src="VMM_image/VMM_image/hotline.svg" alt="Hotline"><span class="label">Gọi ngay</span></a>
+        <a class="btnfacebook" target="_blank" href="https://m.me/menhalanh"><img src="VMM_image/VMM_image/messenger.svg" alt="Chat Messenger"><span class="label">Chat Messenger</span></a>
+        <a class="btnzalo" target="_blank" href="https://zalo.me/0816111123"><img src="VMM_image/VMM_image/zalo.svg" alt="Chat Zalo"><span class="label">Chat Zalo</span></a>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Update cart count function
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const cartCount = document.getElementById('cartCount');
+            if (cartCount) {
+                cartCount.textContent = totalItems;
+                cartCount.style.display = totalItems > 0 ? 'block' : 'none';
+            }
+        }
+        
+        // Initialize cart count on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+        });
+    </script>
+</body>
+</html> 

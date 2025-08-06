@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ Hàng - Vạn Mộc Mall</title>
+    <meta name="description" content="Giỏ hàng của bạn tại Vạn Mộc Mall - Sản phẩm 100% thuần chay từ thực vật Việt Nam">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Prata&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="https://vmm.ctrl.com.vn/c88b292dea22637c3a33.jpg" type="image/x-icon" />
+    <link rel="icon" href="https://vmm.ctrl.com.vn/c88b292dea22637c3a33.jpg" type="image/x-icon" />
+    <link href="https://vmm.ctrl.com.vn/c88b292dea22637c3a33.jpg" rel="apple-touch-icon" />
+    <link href="https://vmm.ctrl.com.vn/c88b292dea22637c3a33.jpg" rel="apple-touch-icon-precomposed" />   
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Cart specific styles */
+        .cart-page {
+            padding: 40px 0;
+            min-height: 60vh;
+        }
+        
+        /* Cart count styles */
+        .cart-icon {
+            position: relative;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            display: none;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            min-width: 24px;
+            min-height: 24px;
+            z-index: 1000;
+            line-height: 1;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+        }
+        
+        /* Multi-level menu styles */
+        .has-submenu {
+            position: relative;
+        }
+        
+        .submenu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            padding: 10px 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .submenu-level2 {
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background: white;
+            min-width: 180px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            padding: 10px 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .has-submenu:hover .submenu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .has-submenu:hover .submenu-level2 {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+        
+        .submenu li,
+        .submenu-level2 li {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .submenu a,
+        .submenu-level2 a {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .submenu a:hover,
+        .submenu-level2 a:hover {
+            background: #f5f5f5;
+            color: #4A7D4A;
+        }
+        
+        .submenu .has-submenu > a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .submenu .has-submenu > a img {
+            width: 12px;
+            height: 12px;
+            transform: rotate(-90deg);
+        }
+        
+        /* Active menu item */
+        .main-nav ul li a.active {
+            color: #4A7D4A;
+            border-bottom: 2px solid #4A7D4A;
+        }
+        
+        /* Menu arrow direction */
+        .has-submenu > a img {
+            transition: transform 0.3s ease;
+        }
+        
+        .has-submenu:hover > a img {
+            transform: rotate(180deg);
+        }
+        
+        .breadcrumb-section {
+            background: #f8f9fa;
+            padding: 20px 0;
+            border-bottom: 1px solid #e9ecef;
+            margin-top: 0;
+        }
+        
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            list-style: none;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .breadcrumb-item {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .breadcrumb-item a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .breadcrumb-item a:hover {
+            color: #28a745;
+        }
+        
+        .breadcrumb-item.active {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .breadcrumb-item:not(:last-child)::after {
+            content: ">";
+            margin-left: 8px;
+            color: #ccc;
+        }
+        
+        .cart-header {
+            text-align: left;
+            margin-bottom: 40px;
+        }
+        
+        .cart-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .cart-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            align-items: flex-start;
+        }
+        
+        .cart-items-section {
+            background: #fff;
+            padding: 20px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .cart-section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .cart-items {
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .cart-info {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .cart-item {
+            display: grid;
+            grid-template-columns: 100px 1fr auto;
+            gap: 20px;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+        }
+        
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .cart-item-details {
+            flex: 1;
+        }
+        
+        .cart-item-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #333;
+            line-height: 1.3;
+        }
+        
+        .cart-item-remove {
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            font-size: 13px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        
+        .cart-item-remove:hover {
+            color: #dc3545;
+        }
+        
+        .cart-item-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 15px;
+        }
+        
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+        }
+        
+        .quantity-btn {
+            background-color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            width: 35px;
+            height: 35px;
+            color: #495057;
+        }
+        
+        .quantity-display {
+            font-size: 16px;
+            font-weight: 500;
+            padding: 0 10px;
+            min-width: 20px;
+            text-align: center;
+        }
+        
+        .cart-item-price {
+            font-size: 16px;
+            font-weight: 600;
+            color: #212529;
+        }
+        
+        .cart-item-remove {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #ff4444;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .cart-item-remove img {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .order-summary-section {
+            position: sticky;
+            top: 20px;
+        }
+        
+        .summary-card {
+            background: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .summary-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+            text-align: left;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .summary-row.total {
+            font-weight: bold;
+            font-size: 18px;
+            color: #4A7D4A;
+            border-top: 2px solid #4A7D4A;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+        
+        .summary-details {
+            margin-bottom: 20px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .summary-row span:first-child {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .amount {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .shipping-note {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .note-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #666;
+        }
+        
+        .note-icon {
+            flex-shrink: 0;
+            font-size: 16px;
+            margin-top: 2px;
+        }
+        
+
+        
+        .checkout-btn {
+            width: 100%;
+            padding: 12px 20px;
+            background: #6c8b51;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-transform: uppercase;
+        }
+        
+        .checkout-btn:hover {
+            background: #5a7543;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-cart h2 {
+            font-family: 'Prata', serif;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .empty-cart p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .continue-shopping {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #4A7D4A;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+        
+        .continue-shopping:hover {
+            background: #3a6a3a;
+        }
+        
+        @media (max-width: 768px) {
+            .cart-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .cart-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .cart-item-image {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .cart-item-quantity {
+                margin-left: 0;
+                margin-top: 15px;
+                justify-content: center;
+            }
+            
+            .cart-item-remove {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html"><img src="c88b292dea22637c3a33.jpg" alt="Vạn Mộc Logo"></a>
+            </div>
+            <div class="menu-toggle">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">TRANG CHỦ</a></li>
+                    <li class="has-submenu">
+                        <a href="category.html">SẢN PHẨM <img src="VMM_ICON/VMM_ICON/arrow.svg" alt="arrow"></a>
+                        <ul class="submenu">
+                            <li><a href="category.html">Brands'</a></li>
+                            <li><a href="category.html">Forganic</a></li>
+                            <li class="has-submenu">
+                                <a href="category.html">Mộc Hương <img src="VMM_ICON/VMM_ICON/arrow.svg" alt="arrow"></a>
+                                <ul class="submenu-level2">
+                                    <li><a href="category.html">Chăm sóc da</a></li>
+                                    <li><a href="category.html">Chăm sóc tóc</a></li>
+                                    <li><a href="category.html">Combo gội</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="category.html">Srisri</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="blog.html">BÀI VIẾT</a></li>
+                    <li><a href="#">KHUYẾN MÃI</a></li>
+                    <li><a href="#">VỀ CHÚNG TÔI</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <a href="#"><img src="VMM_ICON/VMM_ICON/search.png" alt="Search"></a>
+                <a href="cart.html" class="cart-icon">
+                    <img src="VMM_ICON/VMM_ICON/cart.svg" alt="Cart">
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="breadcrumb-section">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Giỏ hàng</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    
+    <section class="cart-page">
+        <div class="container">
+            <div class="cart-header">
+                <h1>Giỏ hàng của bạn</h1>
+            </div>
+            
+                    <div class="cart-content">
+            <!-- Left Column: Cart Items -->
+            <div class="cart-items-section">
+                <h3 class="cart-section-title">Có 0 sản phẩm trong giỏ hàng</h3>
+                
+                <div class="cart-items" id="cartItems">
+                    <!-- Cart items will be dynamically loaded here by JavaScript -->
+                </div>
+
+                <div class="empty-cart-container" style="display: none;">
+                    <div class="empty-cart">
+                        <p>Giỏ hàng của bạn đang trống</p>
+                        <a href="index.html" class="continue-shopping-btn">Tiếp tục mua sắm</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Order Summary -->
+            <div class="order-summary-section">
+                <div class="summary-card">
+                    <h3 class="summary-title">Tóm tắt đơn hàng</h3>
+                    
+                    <div class="summary-details">
+                        <div class="summary-row">
+                            <span>Tạm tính</span>
+                            <span class="amount" id="subtotal">0đ</span>
+                        </div>
+                        
+                        <div class="shipping-note">
+                            <div class="note-item">
+                                <span class="note-icon">🕒</span>
+                                <span>Thời gian giao hàng từ 3-5 ngày tuỳ khu vực (hoặc chậm hơn nếu chưa mở tuyến)</span>
+                            </div>
+                            <div class="note-item">
+                                <span class="note-icon">🚚</span>
+                                <span>Free ship cho đơn hàng từ 1.000.000đ</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="checkout-btn" onclick="proceedToCheckout()">
+                        Tiến hành thanh toán
+                    </button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-col">
+                <h4>VỀ CHÚNG TÔI</h4>
+                <ul>
+                    <li><a href="#">Giới thiệu</a></li>
+                    <li><a href="#">Download Catalogue</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>BẠN NÊN BIẾT</h4>
+                <ul>
+                    <li><a href="#">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                    <li><a href="#">Bảo mật thông tin</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <img src="c88b292dea22637c3a33.jpg" alt="Vạn Mộc Logo" class="footer-logo">
+                <div class="social-icons">
+                    <a href="#"><img src="VMM_ICON/VMM_ICON/socialicon1.svg" alt="Social 1"></a>
+                    <a href="#"><img src="VMM_ICON/VMM_ICON/socialicon2.svg" alt="Social 2"></a>
+                    <a href="#"><img src="VMM_ICON/VMM_ICON/socialicon3.svg" alt="Social 3"></a>
+                    <a href="#"><img src="VMM_ICON/VMM_ICON/socialicon4.svg" alt="Social 4"></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>ĐỊA CHỈ</h4>
+                <p class="address"><img src="VMM_ICON/VMM_ICON/local_icon.svg" alt="Location"> 860/60N/8 Xô Viết Nghệ Tĩnh, phường Bình Thạnh, Tp.Hồ Chí Minh</p>
+                <h4>LIÊN HỆ</h4>
+                <p><img src="VMM_ICON/VMM_ICON/email_icon.svg" alt="Email"> vanmocmall@gmail.com</p>
+                <p><img src="VMM_ICON/VMM_ICON/call_icon.svg" alt="Phone"> 081 611 1123</p>
+            </div>
+        </div>
+        <img src="VMM_ICON/VMM_ICON/decorate_icon.png" class="footer-decor-left-img" alt="Footer Decoration">
+        <img src="VMM_ICON/VMM_ICON/decorate_icon2.png" class="footer-decor-right-img" alt="Footer Decoration">
+        <div class="copyright">
+            <p>Copyright © Vạn Mộc Mall all right reserved</p>
+        </div>
+    </footer>
+
+    <div class="fixedposicon">
+        <a class="btncall" href="tel:0816111123"><img src="VMM_image/VMM_image/hotline.svg" alt="Hotline"><span class="label">Gọi ngay</span></a>
+        <a class="btnfacebook" target="_blank" href="https://m.me/menhalanh"><img src="VMM_image/VMM_image/messenger.svg" alt="Chat Messenger"><span class="label">Chat Messenger</span></a>
+        <a class="btnzalo" target="_blank" href="https://zalo.me/0816111123"><img src="VMM_image/VMM_image/zalo.svg" alt="Chat Zalo"><span class="label">Chat Zalo</span></a>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Update cart count function
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const cartCount = document.getElementById('cartCount');
+            if (cartCount) {
+                cartCount.textContent = totalItems;
+                cartCount.style.display = totalItems > 0 ? 'block' : 'none';
+            }
+        }
+        
+        // Initialize cart count on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+        });
+        // Cart functionality
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        function loadCart() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartSubtitle = document.querySelector('.cart-section-title');
+            const emptyCartContainer = document.querySelector('.empty-cart-container');
+            const cartContent = document.querySelector('.cart-content');
+
+            // Clear previous content
+            cartItemsContainer.innerHTML = '';
+
+            if (cart.length === 0) {
+                emptyCartContainer.style.display = 'block';
+                cartItemsContainer.style.display = 'none';
+                cartSubtitle.textContent = 'Giỏ hàng của bạn đang trống';
+            } else {
+                emptyCartContainer.style.display = 'none';
+                cartItemsContainer.style.display = 'block';
+                cartSubtitle.textContent = `Có ${cart.length} loại sản phẩm trong giỏ hàng`;
+
+                cart.forEach((item, index) => {
+                    const itemElement = document.createElement('div');
+                    itemElement.classList.add('cart-item');
+                    const itemTotalPrice = (parseFloat(item.price) || 0) * item.quantity;
+
+                    itemElement.innerHTML = `
+                        <div class="cart-item-image">
+                            <img src="${item.image}" alt="${item.name}">
+                        </div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-title">${item.name}</div>
+                            <button class="cart-item-remove" onclick="removeItem(${index})">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/><path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/></svg>
+                                XOÁ SẢN PHẨM
+                            </button>
+                        </div>
+                        <div class="cart-item-actions">
+                            <div class="cart-item-quantity">
+                                <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">−</button>
+                                <span class="quantity-display">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                            </div>
+                            <div class="cart-item-price">
+                                <span class="price">${item.price.toLocaleString()} ₫</span>
+                            </div>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(itemElement);
+                });
+            }
+            updateSummary(cart);
+        }
+        
+        function updateSummary(cart) {
+            const subtotalEl = document.getElementById('subtotal');
+            const subtotal = cart.reduce((sum, item) => sum + (parseFloat(item.price) || 0) * item.quantity, 0);
+
+            if (subtotalEl) {
+                subtotalEl.textContent = subtotal.toLocaleString() + 'đ';
+            }
+        }
+        
+        function updateQuantity(index, change) {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            cart[index].quantity = Math.max(1, cart[index].quantity + change);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+            updateCartCount();
+        }
+        
+        function setQuantity(index, value) {
+            cart[index].quantity = Math.max(1, parseInt(value) || 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCart();
+            updateCartCount();
+        }
+        
+        function removeItem(index) {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+            updateCartCount();
+        }
+        
+        function proceedToCheckout() {
+            if (cart.length === 0) {
+                alert('Giỏ hàng trống!');
+                return;
+            }
+            window.location.href = 'paying.html';
+        }
+        
+        // Initial load
+        document.addEventListener('DOMContentLoaded', loadCart);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chăm Sóc Da - Vạn Mộc Mall</title>
+    <meta name="description" content="Sản phẩm chăm sóc da tự nhiên tại Vạn Mộc Mall - 100% thuần chay từ thực vật Việt Nam">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Prata&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="https://vmm.ctrl.com.vn/c88b292dea22637c3a33.jpg" type="image/x-icon" />
+    <link rel="icon" href="https://vmm.ctrl.com.vn/c88b292dea22637c3a33.jpg" type="image/x-icon" />
+    <link href="https://vmm.ctrl.com.vn/c88b292dea22637c3a33.jpg" rel="apple-touch-icon" />
+    <link href="https://vmm.ctrl.com.vn/c88b292dea22637c3a33.jpg" rel="apple-touch-icon-precomposed" />   
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Category page specific styles */
+        .category-page {
+            padding: 40px 0;
+            min-height: 60vh;
+        }
+        
+        /* Cart count styles */
+        .cart-icon {
+            position: relative;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            display: none;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            min-width: 24px;
+            min-height: 24px;
+            z-index: 1000;
+            line-height: 1;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+        }
+        
+        /* Multi-level menu styles */
+        .has-submenu {
+            position: relative;
+        }
+        
+        .submenu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            padding: 10px 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .submenu-level2 {
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background: white;
+            min-width: 180px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            padding: 10px 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .has-submenu:hover .submenu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .has-submenu:hover .submenu-level2 {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+        
+        .submenu li,
+        .submenu-level2 li {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .submenu a,
+        .submenu-level2 a {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .submenu a:hover,
+        .submenu-level2 a:hover {
+            background: #f5f5f5;
+            color: #4A7D4A;
+        }
+        
+        .submenu .has-submenu > a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .submenu .has-submenu > a img {
+            width: 12px;
+            height: 12px;
+            transform: rotate(-90deg);
+        }
+        
+        /* Active menu item */
+        .main-nav ul li a.active {
+            color: #4A7D4A;
+            border-bottom: 2px solid #4A7D4A;
+        }
+        
+        /* Menu arrow direction */
+        .has-submenu > a img {
+            transition: transform 0.3s ease;
+        }
+        
+        .has-submenu:hover > a img {
+            transform: rotate(180deg);
+        }
+        
+        /* Breadcrumb styles from cart */
+        .breadcrumb-section {
+            background: #f8f9fa;
+            padding: 20px 0;
+            border-bottom: 1px solid #e9ecef;
+            margin-top: 0;
+        }
+        
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            list-style: none;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .breadcrumb-item {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .breadcrumb-item a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .breadcrumb-item a:hover {
+            color: #28a745;
+        }
+        
+        .breadcrumb-item.active {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .breadcrumb-item:not(:last-child)::after {
+            content: ">";
+            margin-left: 8px;
+            color: #ccc;
+        }
+
+        /* Product link styles */
+        .product-item h3 a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .product-item h3 a:hover {
+            color: #4A7D4A;
+        }
+
+        .product-image a {
+            display: block;
+            text-decoration: none;
+        }
+        
+        /* Hero banner */
+        .hero-banner {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+        }
+        
+        .hero-image {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Use exact styles from index page */
+        .featured-products {
+            padding: 60px 0;
+            background-color: #F9F9F9;
+        }
+        
+        .section-header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: nowrap;
+        }
+        
+        .title-wrapper h2 {
+            font-family: 'Prata', serif;
+            font-size: 28px;
+            color: #1D1D1D;
+            position: relative;
+            margin: 0;
+            padding-bottom: 10px;
+            white-space: nowrap;
+        }
+        
+        /* .title-wrapper h2:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 70px;
+            height: 2px;
+            background-color: black;
+        } */
+        
+        .subtitle-wrapper {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .filter-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .filter-btn:hover {
+            border-color: #4A7D4A;
+            color: #4A7D4A;
+        }
+        
+        .filter-btn img {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 0 auto;
+        }
+        
+        .product-item {
+            background-color: #FFFFFF;
+            border: 1px solid #EAEAEA;
+            border-radius: 5px;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .product-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .product-image {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 0 10px;
+            background-color: #FFFFFF;
+        }
+        
+        .product-image img {
+            object-fit: contain;
+            display: block;
+        }
+        
+        .product-info {
+            padding: 12px;
+            position: relative;
+            text-align: left;
+            flex-grow: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f9f9f9;
+            min-height: 100px;
+            gap: 10px;
+        }
+        
+        .product-text {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            min-width: 0;
+        }
+        
+        .product-item h3 {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .product-brand {
+            font-size: 10px;
+            color: #777;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+        
+        .price-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+        }
+        
+        .product-item .price {
+            font-size: 15px;
+            font-weight: 600;
+            color: #4A7D4A;
+        }
+        
+        .add-to-cart {
+            background-color: #e8f5e9;
+            border-radius: 5px;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+        }
+        
+        .add-to-cart img {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .sale-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #E57373;
+            color: white;
+            padding: 3px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 3px;
+        }
+        
+        .original-price {
+            font-size: 13px;
+            color: #999;
+            text-decoration: line-through;
+        }
+        
+        /* View more section */
+        .view-more-section {
+            padding: 40px 0;
+            background: white;
+        }
+        
+        .view-more-button {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .view-more-btn {
+            padding: 12px 24px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        .view-more-btn:hover {
+            border-color: #4A7D4A;
+            color: #4A7D4A;
+        }
+        
+        .category-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .category-box {
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .category-box:hover {
+            border-color: #4A7D4A;
+            color: #4A7D4A;
+            background: #f8f9fa;
+        }
+        
+        .category-box span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        /* Service banner */
+        .service-banner {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('VMM_image/VMM_image/background.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.1;
+        }
+        
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .service-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 15px;
+        }
+        
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .service-icon img {
+            width: 30px;
+            height: 30px;
+        }
+        
+        .service-text {
+            color: #333;
+        }
+        
+        .service-text p {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+        
+        .service-text p:first-child {
+            font-weight: 600;
+            color: #4A7D4A;
+        }
+        
+        @media (max-width: 768px) {
+            .service-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .category-boxes {
+                gap: 10px;
+            }
+            
+            .category-box {
+                min-width: 100px;
+                padding: 8px 15px;
+            }
+            
+            .category-box span {
+                font-size: 12px;
+            }
+            
+            .section-header {
+                gap: 15px;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+            
+            .title-wrapper h2 {
+                font-size: 24px;
+            }
+            
+            .subtitle-wrapper {
+                align-self: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .service-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .category-boxes {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .category-box {
+                width: 200px;
+                min-width: auto;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .hero-banner {
+                height: 250px;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .blog-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html"><img src="c88b292dea22637c3a33.jpg" alt="Vạn Mộc Logo"></a>
+            </div>
+            <div class="menu-toggle">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">TRANG CHỦ</a></li>
+                    <li class="has-submenu">
+                        <a href="category.html">SẢN PHẨM <img src="VMM_ICON/VMM_ICON/arrow.svg" alt="arrow"></a>
+                        <ul class="submenu">
+                            <li><a href="category.html">Brands'</a></li>
+                            <li><a href="category.html">Forganic</a></li>
+                            <li class="has-submenu">
+                                <a href="category.html">Mộc Hương <img src="VMM_ICON/VMM_ICON/arrow.svg" alt="arrow"></a>
+                                <ul class="submenu-level2">
+                                    <li><a href="category.html">Chăm sóc da</a></li>
+                                    <li><a href="category.html">Chăm sóc tóc</a></li>
+                                    <li><a href="category.html">Combo gội</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="category.html">Srisri</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="blog.html">BÀI VIẾT</a></li>
+                    <li><a href="#">KHUYẾN MÃI</a></li>
+                    <li><a href="#">VỀ CHÚNG TÔI</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <a href="#"><img src="VMM_ICON/VMM_ICON/search.png" alt="Search"></a>
+                <a href="cart.html" class="cart-icon">
+                    <img src="VMM_ICON/VMM_ICON/cart.svg" alt="Cart">
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="breadcrumb-section">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="#">Sản phẩm</a></li>
+                    <li class="breadcrumb-item active">Chăm sóc da</li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <section class="hero-banner">
+        <div class="hero-image">
+            <img src="https://nov-karl-6.myshopify.com/cdn/shop/files/s-1_2048x.jpg?v=1665652995" alt="Hero Banner">
+        </div>
+    </section>
+
+    <section class="featured-products">
+        <div class="container">
+            <div class="section-header">
+                <div class="title-wrapper">
+                    <h2>CHĂM SÓC DA</h2>
+                </div>
+                <div class="subtitle-wrapper">
+                    <div class="filter-btn">
+                        <img src="VMM_ICON/VMM_ICON/filter_1.svg" alt="Filter">
+                        Bộ lọc
+                    </div>
+                    <div class="filter-btn">
+                        <img src="VMM_ICON/VMM_ICON/filter_2.svg" alt="Sort">
+                        Sắp xếp
+                    </div>
+                </div>
+            </div>
+            <div class="product-grid">
+                <div class="product-item">
+                    <div class="product-image">
+                        <a href="productDetails.html">
+                            <img src="VMM_image/VMM_image/hinh product/property11.png" alt="Product 1">
+                        </a>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-text">
+                            <h3><a href="productDetails.html">Nước dưỡng tóc tinh dầu bưởi 140ml</a></h3>
+                            <p class="product-brand">GIẢM GÃY RỤNG VÀ LÀM MỀM TÓC</p>
+                            <div class="price-wrapper">
+                                <span class="price">179.660₫</span>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <a href="#" onclick="addToCart('Nước dưỡng tóc tinh dầu bưởi 140ml', 'GIẢM GÃY RỤNG VÀ LÀM MỀM TÓC', 179660, 'VMM_image/VMM_image/hinh product/property11.png', event); return false;"><img src="VMM_ICON/VMM_ICON/icon_cart.svg" alt="Add to cart"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item">
+                    <div class="product-image">
+                        <img src="VMM_image/VMM_image/hinh product/property12.png" alt="Product 2">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-text">
+                            <h3>Nước dưỡng tóc tinh dầu bưởi 140ml</h3>
+                            <p class="product-brand">GIẢM GÃY RỤNG VÀ LÀM MỀM TÓC</p>
+                            <div class="price-wrapper">
+                                <span class="price">279.660₫</span>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <a href="#" onclick="addToCart('Nước dưỡng tóc tinh dầu bưởi 140ml', 'GIẢM GÃY RỤNG VÀ LÀM MỀM TÓC', 279660, 'VMM_image/VMM_image/hinh product/property12.png', event); return false;"><img src="VMM_ICON/VMM_ICON/icon_cart.svg" alt="Add to cart"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item">
+                    <div class="product-image">
+                        <img src="VMM_image/VMM_image/hinh product/property13.png" alt="Product 3">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-text">
+                            <h3>Nước dưỡng tóc tinh dầu bưởi 140ml</h3>
+                            <p class="product-brand">GIẢM GÃY RỤNG VÀ LÀM MỀM TÓC</p>
+                            <div class="price-wrapper">
+                                <span class="price">279.660₫</span>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <a href="#" onclick="addToCart('Nước dưỡng tóc tinh dầu bưởi 140ml', 'GIẢM GÃY RỤNG VÀ LÀM MỀM TÓC', 279660, 'VMM_image/VMM_image/hinh product/property13.png', event); return false;"><img src="VMM_ICON/VMM_ICON/icon_cart.svg" alt="Add to cart"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item">
+                    <div class="product-image">
+                        <img src="VMM_image/VMM_image/hinh product/property14.png" alt="Product 4">
+                        <div class="sale-badge">10% OFF</div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-text">
+                            <h3>Nước dưỡng tóc tinh dầu bưởi 140ml</h3>
+                            <p class="product-brand">GIẢM GÃY RỤNG VÀ LÀM MỀM TÓC</p>
+                            <div class="price-wrapper">
+                                <span class="price">279.660₫</span>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <a href="#" onclick="addToCart('Nước dưỡng tóc tinh dầu bưởi 140ml', 'GIẢM GÃY RỤNG VÀ LÀM MỀM TÓC', 279660, 'VMM_image/VMM_image/hinh product/property14.png', event); return false;"><img src="VMM_ICON/VMM_ICON/icon_cart.svg" alt="Add to cart"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item">
+                    <div class="product-image">
+                        <img src="VMM_image/VMM_image/hinh product/property15.png" alt="Product 5">
+                        <div class="sale-badge">Giảm 40%</div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-text">
+                            <h3>Dầu gội kích thích mọc tóc thảo dược</h3>
+                            <p class="product-brand">GIẢM GÃY RỤNG - KÍCH THÍCH MỌ...</p>
+                            <div class="price-wrapper">
+                                <span class="original-price">279.660₫</span>
+                                <span class="price">162.000₫</span>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <a href="#" onclick="addToCart('Dầu gội kích thích mọc tóc thảo dược', 'GIẢM GÃY RỤNG - KÍCH THÍCH MỌ...', 162000, 'VMM_image/VMM_image/hinh product/property15.png', event); return false;"><img src="VMM_ICON/VMM_ICON/icon_cart.svg" alt="Add to cart"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item">
+                    <div class="product-image">
+                        <img src="VMM_image/VMM_image/hinh product/property16.png" alt="Product 6">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-text">
+                            <h3>Dầu gội kích thích mọc tóc thảo dược</h3>
+                            <p class="product-brand">GIẢM GÃY RỤNG - KÍCH THÍCH MỌ...</p>
+                            <div class="price-wrapper">
+                                <span class="price">279.660₫</span>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <a href="#" onclick="addToCart('Dầu gội kích thích mọc tóc thảo dược', 'GIẢM GÃY RỤNG - KÍCH THÍCH MỌ...', 279660, 'VMM_image/VMM_image/hinh product/property16.png', event); return false;"><img src="VMM_ICON/VMM_ICON/icon_cart.svg" alt="Add to cart"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item">
+                    <div class="product-image">
+                        <img src="VMM_image/VMM_image/hinh product/property17.png" alt="Product 7">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-text">
+                            <h3>Dầu gội kích thích mọc tóc thảo dược</h3>
+                            <p class="product-brand">GIẢM GÃY RỤNG - KÍCH THÍCH MỌ...</p>
+                            <div class="price-wrapper">
+                                <span class="price">279.660₫</span>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <a href="#" onclick="addToCart('Dầu gội kích thích mọc tóc thảo dược', 'GIẢM GÃY RỤNG - KÍCH THÍCH MỌ...', 279660, 'VMM_image/VMM_image/hinh product/property17.png', event); return false;"><img src="VMM_ICON/VMM_ICON/icon_cart.svg" alt="Add to cart"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item">
+                    <div class="product-image">
+                        <img src="VMM_image/VMM_image/hinh product/property18.png" alt="Product 8">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-text">
+                            <h3>Dầu gội kích thích mọc tóc thảo dược</h3>
+                            <p class="product-brand">GIẢM GÃY RỤNG - KÍCH THÍCH MỌ...</p>
+                            <div class="price-wrapper">
+                                <span class="price">279.660₫</span>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <a href="#" onclick="addToCart('Dầu gội kích thích mọc tóc thảo dược', 'GIẢM GÃY RỤNG - KÍCH THÍCH MỌ...', 279660, 'VMM_image/VMM_image/hinh product/property18.png', event); return false;"><img src="VMM_ICON/VMM_ICON/icon_cart.svg" alt="Add to cart"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item">
+                    <div class="product-image">
+                        <img src="VMM_image/VMM_image/hinh product/property19.png" alt="Product 9">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-text">
+                            <h3>Dầu gội kích thích mọc tóc thảo dược</h3>
+                            <p class="product-brand">GIẢM GÃY RỤNG - KÍCH THÍCH MỌ...</p>
+                            <div class="price-wrapper">
+                                <span class="price">279.660₫</span>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <a href="#" onclick="addToCart('Dầu gội kích thích mọc tóc thảo dược', 'GIẢM GÃY RỤNG - KÍCH THÍCH MỌ...', 279660, 'VMM_image/VMM_image/hinh product/property19.png', event); return false;"><img src="VMM_ICON/VMM_ICON/icon_cart.svg" alt="Add to cart"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item">
+                    <div class="product-image">
+                        <img src="VMM_image/VMM_image/hinh product/property110.png" alt="Product 10">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-text">
+                            <h3>Dầu gội kích thích mọc tóc thảo dược</h3>
+                            <p class="product-brand">GIẢM GÃY RỤNG - KÍCH THÍCH MỌ...</p>
+                            <div class="price-wrapper">
+                                <span class="price">279.660₫</span>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <a href="#" onclick="addToCart('Dầu gội kích thích mọc tóc thảo dược', 'GIẢM GÃY RỤNG - KÍCH THÍCH MỌ...', 279660, 'VMM_image/VMM_image/hinh product/property110.png', event); return false;"><img src="VMM_ICON/VMM_ICON/icon_cart.svg" alt="Add to cart"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item">
+                    <div class="product-image">
+                        <img src="VMM_image/VMM_image/hinh product/property111.png" alt="Product 11">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-text">
+                            <h3>Dầu gội kích thích mọc tóc thảo dược</h3>
+                            <p class="product-brand">GIẢM GÃY RỤNG - KÍCH THÍCH MỌ...</p>
+                            <div class="price-wrapper">
+                                <span class="price">279.660₫</span>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <a href="#" onclick="addToCart('Dầu gội kích thích mọc tóc thảo dược', 'GIẢM GÃY RỤNG - KÍCH THÍCH MỌ...', 279660, 'VMM_image/VMM_image/hinh product/property111.png', event); return false;"><img src="VMM_ICON/VMM_ICON/icon_cart.svg" alt="Add to cart"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item">
+                    <div class="product-image">
+                        <img src="VMM_image/VMM_image/hinh product/property112.png" alt="Product 12">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-text">
+                            <h3>Dầu gội kích thích mọc tóc thảo dược</h3>
+                            <p class="product-brand">GIẢM GÃY RỤNG - KÍCH THÍCH MỌ...</p>
+                            <div class="price-wrapper">
+                                <span class="price">279.660₫</span>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <a href="#" onclick="addToCart('Dầu gội kích thích mọc tóc thảo dược', 'GIẢM GÃY RỤNG - KÍCH THÍCH MỌ...', 279660, 'VMM_image/VMM_image/hinh product/property112.png', event); return false;"><img src="VMM_ICON/VMM_ICON/icon_cart.svg" alt="Add to cart"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="view-more-section">
+        <div class="container">
+            <div class="view-more-button">
+                <button class="view-more-btn">XEM NHIỀU HƠN</button>
+            </div>
+            <div class="category-boxes">
+                <div class="category-box">
+                    <span>Chống nắng</span>
+                </div>
+                <div class="category-box">
+                    <span>Tẩy trang</span>
+                </div>
+                <div class="category-box">
+                    <span>Sữa rửa mặt</span>
+                </div>
+                <div class="category-box">
+                    <span>Mặt nạ</span>
+                </div>
+                <div class="category-box">
+                    <span>Nước cân bằng</span>
+                </div>
+                <div class="category-box">
+                    <span>Tinh chất</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="blog">
+        <div class="container">
+            <div class="section-header">
+                <h2>CÓ THỂ BẠN QUAN TÂM</h2>
+                <div class="view-all-wrapper">
+                     <a href="#" class="view-all">Xem tất cả <img src="VMM_ICON/VMM_ICON/button_arrow.svg" alt="arrow"></a>
+                </div>
+            </div>
+            <div class="blog-grid">
+                <div class="blog-post">
+                    <div class="product-image">
+                        <div class="blog-tag">Chăm sóc</div>
+                        <img src="VMM_image/VMM_image/hinh bai viet/property15.png" alt="Blog Post 1">
+                    </div>
+                    <div class="blog-content">
+                        <h3>Chăm sóc da cho da nhạy cảm</h3>
+                        <p>Những bí quyết chăm sóc da an toàn cho làn da nhạy cảm</p>
+                        <div class="post-meta">
+                            <span>Bởi Vạn Mộc</span> - <span>29/07/2025</span>
+                        </div>
+                        <a href="#" class="read-more">ĐỌC NGAY <img src="VMM_ICON/VMM_ICON/button_docngay.svg" alt="arrow"></a>
+                    </div>
+                </div>
+                <div class="blog-post">
+                    <div class="product-image">
+                        <div class="blog-tag">Làm đẹp</div>
+                        <img src="VMM_image/VMM_image/hinh bai viet/property18.png" alt="Blog Post 2">
+                    </div>
+                    <div class="blog-content">
+                        <h3>Quy trình chăm sóc da cơ bản</h3>
+                        <p>Hướng dẫn quy trình chăm sóc da đúng cách</p>
+                         <div class="post-meta">
+                            <span>Bởi Vạn Mộc</span> - <span>25/07/2025</span>
+                        </div>
+                        <a href="#" class="read-more">ĐỌC NGAY <img src="VMM_ICON/VMM_ICON/button_docngay.svg" alt="arrow"></a>
+                    </div>
+                </div>
+                <div class="blog-post">
+                    <div class="product-image">
+                        <div class="blog-tag">Đời sống</div>
+                        <img src="VMM_image/VMM_image/hinh bai viet/property19.png" alt="Blog Post 3">
+                    </div>
+                    <div class="blog-content">
+                        <h3>Thành phần tự nhiên tốt cho da</h3>
+                        <p>Khám phá các thành phần thiên nhiên an toàn</p>
+                        <div class="post-meta">
+                            <span>Bởi Vạn Mộc</span> - <span>22/07/2025</span>
+                        </div>
+                        <a href="#" class="read-more">ĐỌC NGAY <img src="VMM_ICON/VMM_ICON/button_docngay.svg" alt="arrow"></a>
+                    </div>
+                </div>
+                <div class="blog-post">
+                    <div class="product-image">
+                        <div class="blog-tag">Review</div>
+                        <img src="VMM_image/VMM_image/hinh bai viet/property116.png" alt="Blog Post 4">
+                    </div>
+                    <div class="blog-content">
+                        <h3>Mẹo chăm sóc da hàng ngày</h3>
+                        <p>Những mẹo nhỏ giúp da đẹp mỗi ngày</p>
+                        <div class="post-meta">
+                            <span>Bởi Vạn Mộc</span> - <span>20/07/2025</span>
+                        </div>
+                        <a href="#" class="read-more">ĐỌC NGAY <img src="VMM_ICON/VMM_ICON/button_docngay.svg" alt="arrow"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="service-banner">
+        <div class="container">
+            <div class="service-grid">
+                <div class="service-item">
+                    <div class="service-icon">
+                        <img src="VMM_ICON/VMM_ICON/icon1_chinhsach.png" alt="Package">
+                    </div>
+                    <div class="service-text">
+                        <p>Kiểm tra hàng trước</p>
+                        <p>khi thanh toán</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon">
+                        <img src="VMM_ICON/VMM_ICON/icon2_chinhsach.png" alt="Return">
+                    </div>
+                    <div class="service-text">
+                        <p>Miễn phí đổi trả</p>
+                        <p>hàng trong 7 ngày</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon">
+                        <img src="VMM_ICON/VMM_ICON/icon4_chinhsach.png" alt="Truck">
+                    </div>
+                    <div class="service-text">
+                        <p>Freeship cho đơn</p>
+                        <p>hàng 1.000.000₫</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon">
+                        <img src="VMM_ICON/VMM_ICON/call_icon.png" alt="Support">
+                    </div>
+                    <div class="service-text">
+                        <p>Hỗ trợ khách hàng</p>
+                        <p>24/7</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-col">
+                <h4>VỀ CHÚNG TÔI</h4>
+                <ul>
+                    <li><a href="#">Giới thiệu</a></li>
+                    <li><a href="#">Download Catalogue</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>BẠN NÊN BIẾT</h4>
+                <ul>
+                    <li><a href="#">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                    <li><a href="#">Bảo mật thông tin</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <img src="c88b292dea22637c3a33.jpg" alt="Vạn Mộc Logo" class="footer-logo">
+                <div class="social-icons">
+                    <a href="#"><img src="VMM_ICON/VMM_ICON/socialicon1.svg" alt="Social 1"></a>
+                    <a href="#"><img src="VMM_ICON/VMM_ICON/socialicon2.svg" alt="Social 2"></a>
+                    <a href="#"><img src="VMM_ICON/VMM_ICON/socialicon3.svg" alt="Social 3"></a>
+                    <a href="#"><img src="VMM_ICON/VMM_ICON/socialicon4.svg" alt="Social 4"></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>ĐỊA CHỈ</h4>
+                <p class="address"><img src="VMM_ICON/VMM_ICON/local_icon.svg" alt="Location"> 860/60N/8 Xô Viết Nghệ Tĩnh, phường Bình Thạnh, Tp.Hồ Chí Minh</p>
+                <h4>LIÊN HỆ</h4>
+                <p><img src="VMM_ICON/VMM_ICON/email_icon.svg" alt="Email"> vanmocmall@gmail.com</p>
+                <p><img src="VMM_ICON/VMM_ICON/call_icon.svg" alt="Phone"> 081 611 1123</p>
+            </div>
+        </div>
+        <img src="VMM_ICON/VMM_ICON/decorate_icon.png" class="footer-decor-left-img" alt="Footer Decoration">
+        <img src="VMM_ICON/VMM_ICON/decorate_icon2.png" class="footer-decor-right-img" alt="Footer Decoration">
+        <div class="copyright">
+            <p>Copyright © Vạn Mộc Mall all right reserved</p>
+        </div>
+    </footer>
+
+    <div class="fixedposicon">
+        <a class="btncall" href="tel:0816111123"><img src="VMM_image/VMM_image/hotline.svg" alt="Hotline"><span class="label">Gọi ngay</span></a>
+        <a class="btnfacebook" target="_blank" href="https://m.me/menhalanh"><img src="VMM_image/VMM_image/messenger.svg" alt="Chat Messenger"><span class="label">Chat Messenger</span></a>
+        <a class="btnzalo" target="_blank" href="https://zalo.me/0816111123"><img src="VMM_image/VMM_image/zalo.svg" alt="Chat Zalo"><span class="label">Chat Zalo</span></a>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Update cart count function
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const cartCount = document.getElementById('cartCount');
+            if (cartCount) {
+                cartCount.textContent = totalItems;
+                cartCount.style.display = totalItems > 0 ? 'block' : 'none';
+            }
+        }
+        
+        // Add to cart function
+        function addToCart(name, description, price, image, event) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            // Check if item already exists
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    name: name,
+                    description: description,
+                    price: price,
+                    image: image,
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            
+            // Show notification
+            showNotification('Đã thêm vào giỏ hàng!');
+            
+            // Create flying animation
+            createFlyingAnimation(event, image);
+        }
+        
+        function createFlyingAnimation(event, imageSrc) {
+            // Get cart icon position
+            const cartIcon = document.querySelector('.cart-icon img');
+            const cartRect = cartIcon.getBoundingClientRect();
+            
+            // Get click position
+            const clickX = event.clientX;
+            const clickY = event.clientY;
+            
+            // Create flying element with original image size
+            const flyingElement = document.createElement('div');
+            flyingElement.style.cssText = `
+                position: fixed;
+                width: 120px;
+                height: 120px;
+                background-image: url('${imageSrc}');
+                background-size: cover;
+                background-position: center;
+                border-radius: 8px;
+                z-index: 9999;
+                pointer-events: none;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+                left: ${clickX - 60}px;
+                top: ${clickY - 60}px;
+                transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            `;
+            
+            document.body.appendChild(flyingElement);
+            
+            // Animate to cart with scaling and rotation
+            setTimeout(() => {
+                flyingElement.style.left = `${cartRect.left + cartRect.width/2 - 20}px`;
+                flyingElement.style.top = `${cartRect.top + cartRect.height/2 - 20}px`;
+                flyingElement.style.width = '40px';
+                flyingElement.style.height = '40px';
+                flyingElement.style.transform = 'scale(0.8) rotate(360deg)';
+                flyingElement.style.opacity = '0.8';
+                flyingElement.style.borderRadius = '50%';
+            }, 100);
+            
+            // Remove element after animation
+            setTimeout(() => {
+                if (flyingElement.parentNode) {
+                    flyingElement.parentNode.removeChild(flyingElement);
+                }
+            }, 1200);
+        }
+        
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #4A7D4A;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                z-index: 1000;
+                font-weight: 500;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // Initialize cart count on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+        });
+    </script>
+</body>
+</html> 
